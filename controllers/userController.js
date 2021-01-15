@@ -12,7 +12,7 @@ exports.create = (req, res) => {
 exports.list = (req, res) => {
     users.find(function (err, result){
         if(err) res.send(err);
-        else res.json({result});
+        else res.send({result});
     });
 };
 
