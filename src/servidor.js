@@ -1,15 +1,18 @@
-const express = require('express');
-const app = express();
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-require('dotenv').config();
+import express from 'express'
+const app = express()
+import mongoose from 'mongoose'
+import bodyParser from 'body-parser'
+import router from "./routes.js";
+import {config} from "dotenv";
 
+
+config()
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.get('/', (req, res)=>{
     res.send("Pàgina inicial da API")});
 
-require('../src/routes')(app);
+app.use("/api", router)
 
 //CONECTANDO AO BANCO
 mongoose.connect(process.env.DATABASE_URI, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false}).then(() => {

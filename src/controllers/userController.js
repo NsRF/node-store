@@ -1,36 +1,36 @@
-const users = require('../databases/models/users');
+import users from '../databases/models/users.js'
 
 
-exports.create = (req, res) => {
+export function create(req, res){
     if(!req.body) return res.status(400).send("Corpo esta nulo!");
     users.create(req.body, function (err, result){
         if(err) res.send(err);
         res.json(result);
     })
-};
+}
 
-exports.list = (req, res) => {
+export function list(req, res) {
     users.find(function (err, result){
         if(err) res.send(err);
         else res.send({result});
     });
-};
+}
 
-exports.search = (req, res) => {
+export function search(req, res){
     users.findById(req.params.id, function (err, result){
         if(err) res.send(err);
         else res.send(result);
     })
 }
 
-exports.delete = (req, res) => {
+export function remove(req, res){
     users.findByIdAndDelete(req.params.id, function (err, result){
         if(err) res.send(err);
         else res.json({ message: "Deleted with success!" });
     });
-};
+}
 
-exports.update = (req, res) => {
+export function update(req, res){
     users.findByIdAndUpdate(req.params.id, req.body, function (err, doc){
         if(err) res.send(err);
         else res.json({ message: "Modified with success!" });

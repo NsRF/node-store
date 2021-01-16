@@ -1,6 +1,6 @@
-const products = require('../databases/models/products');
+import products from "../databases/models/products.js"
 
-exports.create = function(req,res){
+export function create(req,res){
     if(!req.body) return res.status(400).json({
         confirmation : "fail",
         data : "O corpo está vazio"
@@ -9,9 +9,9 @@ exports.create = function(req,res){
         if(err) return res.send(err);
         else res.send(result)
     })
-};
+}
 
-exports.list = (req, res) =>{
+export function list(req, res){
     products.find(function (err, result){
         if(err) return res.status(400).json({
             confirmation : "fail",
@@ -23,9 +23,9 @@ exports.list = (req, res) =>{
         })
 
     })
-};
+}
 
-exports.search = (req, res) => {
+export function search(req, res){
     products.findById(req.params.id, function (err, result){
         if(err) return res.status(400).json({
             confirmation : "fail",
@@ -36,9 +36,9 @@ exports.search = (req, res) => {
             data : result
         })
     })
-};
+}
 
-exports.update = (req, res) => {
+export function update(req, res){
     products.findByIdAndUpdate(req.params.id, req.body,  (err, result) => {
         if(err) return res.status(400).json({
             confirmation : "fail",
@@ -49,9 +49,9 @@ exports.update = (req, res) => {
             data : result
         })
     })
-};
+}
 
-exports.delete= (req, res) => {
+export function remove(req, res){
     products.findByIdAndDelete(req.params.id, function (err, result){
         if(err) return res.status(400).json({
             confirmation : "fail",
@@ -62,5 +62,5 @@ exports.delete= (req, res) => {
             data : result
         })
     })
-};
+}
 

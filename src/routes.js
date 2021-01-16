@@ -1,59 +1,60 @@
-require("dotenv").config();
-const jwt = require('jsonwebtoken');
-const id = "6001c69599f85a110c2df790";
-module.exports = (app) => {
+import {Router} from "express"
+import jwt from "jsonwebtoken"
+const router = Router()
 
-    //AUTH
-    app.post('/api/login/:id', (req, res) =>{
-        if(req.params.id == id)
-        {
-            const token = jwt.sign({id}, process.env.SECRET, {expiresIn: 300});
-            return res.json({auth: true, token: token})
-        }
-
-        res.status(500).json({message: 'Login Invàlido'});
-    })
-
-    app.post('/api/logout/', (req, res)=> {
-        res.json({auth: false, token: null});
-    })
-
-    function verifyJwt(req, res, next)
+//AUTH
+router.post('/login/', (req, res) =>{
+    var foundUser = req.body.username
+    if(foundUser === "nasserfarhat" && req.body.password === "nf231")
     {
-        const token = req.headers['x-access-token'];
-        if(!token) return res.status(400).json({auth: false, message: 'Sem token de autenticação!'})
-
-        jwt.verify(token, process.env.SECRET, (err, decoded)=>{
-            if(err) return res.status(500).json({auth: false, message: 'Falha de autenticação'})
-
-            req.id = decoded.id;
-            next();
-        });
+        const token = jwt.sign({foundUser}, process.env.SECRET, {expiresIn: 300});
+        return res.json({auth: true, token: token})
     }
 
-    //USER ROUTES
-    const userController = require('../controllers/userController');
+    res.status(500).json({message: 'Login Inválido'});
+})
 
-    app.post('/api/users/insert', verifyJwt, userController.create)
+router.post('/logout/', (req, res)=> {
+    res.json({auth: false, token: null});
+})
 
-    app.get('/api/users/list', verifyJwt, userController.list)
+function verifyJwt(req, res, next)
+{
+    const token = req.headers['x-access-token'];
+    if(!token) return res.status(400).json({auth: false, message: 'Sem token de autenticação!'})
 
-    app.get('/api/users/list/:id', verifyJwt, userController.search)
+    jwt.verify(token, process.env.SECRET, (err, decoded)=>{
+        if(err) return res.status(500).json({auth: false, message: 'Falha de autenticação'})
 
-    app.put('/api/users/list/:id', verifyJwt, userController.update)
-
-    app.delete('/api/users/delete/:id', verifyJwt, userController.delete)
-
-    //PRODUCTS ROUTES
-    const productController = require('../controllers/productController');
-
-    app.get('/api/products/list', verifyJwt, productController.list);
-
-    app.get('/api/products/list/:id', verifyJwt, productController.search);
-
-    app.post('/api/products/insert', verifyJwt, productController.create);
-
-    app.put('/api/products/list/:id', verifyJwt, productController.update);
-
-    app.delete('/api/products/delete/:id', verifyJwt, productController.delete);
+        req.id = decoded.id;
+        next();
+    });
 }
+
+//USER ROUTES
+import * as userController from "../src/controllers/userController.js"
+
+router.post('/users/insert', verifyJwt, userController.create)
+
+router.get('/users/list', verifyJwt, userController.list)
+
+router.get('/users/list/:id', verifyJwt, userController.search)
+
+router.put('/users/list/:id', verifyJwt, userController.update)
+
+router.delete('/users/delete/:id', verifyJwt, userController.remove)
+
+//PRODUCTS ROUTES
+import * as productController from './controllers/productController.js'
+
+router.get('/products/list', verifyJwt, productController.list);
+
+router.get('/products/list/:id', verifyJwt, productController.search);
+
+router.post('/products/insert', verifyJwt, productController.create);
+
+router.put('/products/list/:id', verifyJwt, productController.update);
+
+router.delete('/products/delete/:id', verifyJwt, productController.remove);
+
+export default router
