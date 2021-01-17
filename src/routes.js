@@ -38,6 +38,8 @@ router.post('/users/insert', verifyJwt, userController.create)
 
 router.get('/users/list', verifyJwt, userController.list)
 
+router.get('/users/listXlsx', userController.xlsxList)
+
 router.get('/users/list/:id', verifyJwt, userController.search)
 
 router.put('/users/list/:id', verifyJwt, userController.update)
@@ -48,6 +50,8 @@ router.delete('/users/delete/:id', verifyJwt, userController.remove)
 import * as productController from './controllers/productController.js'
 
 router.get('/products/list', verifyJwt, productController.list);
+
+router.get('/products/listXlsx', productController.listXlsx);
 
 router.get('/products/list/:id', verifyJwt, productController.search);
 
