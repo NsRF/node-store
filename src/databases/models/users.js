@@ -15,6 +15,9 @@ const UserSchema = mongoose.Schema({
 
     cpfcnpj: {type: String,
         require: true},
+
+    admin: {type: Boolean},
+
 }, {timestamp: true});
 
 export default mongoose.model("Users", UserSchema);

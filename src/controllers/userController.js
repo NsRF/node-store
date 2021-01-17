@@ -29,8 +29,8 @@ export function xlsxList(req, res){
 
             worksheet.columns = [
                 {header: 'Username', key: 'username', width: 10},
-                {header: 'Name', key: 'name', width: 10},
-                {header: 'E-mail', key: 'email', width: 10},
+                {header: 'Name', key: 'name', width: 30},
+                {header: 'E-mail', key: 'email', width: 30},
                 {header: 'CPF/CNPJ', key: 'cpfcnpj', width: 10},
             ]
             worksheet.addRows(jsonResult)

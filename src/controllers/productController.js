@@ -23,7 +23,7 @@ export function listXlsx(req, res){
             const worksheet = workbook.addWorksheet("Products")
 
             worksheet.columns = [
-                {header: 'Name', key: 'name', width: 10},
+                {header: 'Name', key: 'name', width: 30},
                 {header: 'Price', key: 'price', width: 10},
                 {header: 'Category', key: 'category', width: 10},
             ]

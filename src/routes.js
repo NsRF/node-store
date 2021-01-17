@@ -1,17 +1,20 @@
 import {Router} from "express"
 import jwt from "jsonwebtoken"
 const router = Router()
+import users from '../src/databases/models/users.js'
 
 //AUTH
 router.post('/login/', (req, res) =>{
-    var foundUser = req.body.username
-    if(foundUser === "nasserfarhat" && req.body.password === "nf231")
-    {
-        const token = jwt.sign({foundUser}, process.env.SECRET, {expiresIn: 300});
-        return res.json({auth: true, token: token})
-    }
-
-    res.status(500).json({message: 'Login Inválido'});
+   users.findOne({username: req.body.username}, (err, result) =>{
+       const payload = [result.username, result.cpfcnpj]
+       if(result.admin && req.body.username != null && req.body.password === result.password)
+       {
+           const token = jwt.sign({payload}, process.env.SECRET, {expiresIn: 300})
+           return res.json({auth: true, token: token})
+       }
+       else
+           return res.status(500).json({message: 'Login sem permissão ou inválido!'})
+   })
 })
 
 router.post('/logout/', (req, res)=> {
